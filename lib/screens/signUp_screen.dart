@@ -62,18 +62,53 @@ class _SignUpPageState extends State<SignUpPage> {
         type: StepperType.horizontal,
         steps: getSteps(),
         currentStep: currentStep,
-        onStepContinue: () {
-          final isLastStep = currentStep == getSteps().length - 1;
+        controlsBuilder: (context, _) {
+          return Row(
+            children: <Widget>[
+              TextButton(
+                onPressed: () {
+                  final isLastStep = currentStep == getSteps().length - 1;
 
-          if (isLastStep) {
-            print("Completed");
-          } else {
-            setState(() => {currentStep += 1});
-          }
+                  if (isLastStep) {
+                    print("Completed");
+                  } else {
+                    setState(() => {currentStep += 1});
+                  }
+                },
+                style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                              side: const BorderSide(color: Colors.grey)))),
+                child: const Text('NEXT'),
+              ),
+              TextButton(
+                onPressed: () {
+currentStep == 0 ? null : setState(() => {currentStep -= 1});
+                },
+                style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                              side: const BorderSide(color: Colors.grey)))),
+                child: const Text('EXIT'),
+              ),
+            ],
+          );
         },
-        onStepCancel: () {
-          currentStep == 0 ? null : setState(() => {currentStep -= 1});
-        },
+
+        // onStepContinue: () {
+        //   final isLastStep = currentStep == getSteps().length - 1;
+
+        //   if (isLastStep) {
+        //     print("Completed");
+        //   } else {
+        //     setState(() => {currentStep += 1});
+        //   }
+        // },
+        // onStepCancel: () {
+        //   currentStep == 0 ? null : setState(() => {currentStep -= 1});
+        // },
       ),
     );
   }
