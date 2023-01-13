@@ -30,10 +30,12 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   cupertino_icons: ^1.0.2
+  custom_searchable_dropdown: ^2.1.1
   flutter:
     sdk: flutter
   flutter_datetime_picker: ^1.5.1
   flutter_svg: ^1.1.6
+  http: ^0.13.5
   intl: ^0.18.0
 
 dev_dependencies:

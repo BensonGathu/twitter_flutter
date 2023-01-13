@@ -7,9 +7,8 @@ import 'package:twitter_flutter/widgets/text_field_input.dart';
 import '../utils/colors.dart';
 
 class LoginPage2 extends StatefulWidget {
-  const LoginPage2({
-    super.key,
-  });
+  String username;
+  LoginPage2({super.key, required this.username});
 
   @override
   State<LoginPage2> createState() => _LoginPage2State();
@@ -18,7 +17,7 @@ class LoginPage2 extends StatefulWidget {
 class _LoginPage2State extends State<LoginPage2> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  late String username;
+  // late String username = "";
 
   void Login() {
     print(_passwordController.text);
@@ -29,7 +28,9 @@ class _LoginPage2State extends State<LoginPage2> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _usernameController.text = username;
+    setState(() {
+      _usernameController.text = widget.username;
+    });
   }
 
   @override
@@ -37,9 +38,7 @@ class _LoginPage2State extends State<LoginPage2> {
     final InputBorder =
         OutlineInputBorder(borderSide: Divider.createBorderSide(context));
     var username = ModalRoute.of(context)!.settings.arguments;
-    setState(() => {
-      username = username
-    });
+    setState(() => {username = username});
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,

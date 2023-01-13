@@ -1,12 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:twitter_flutter/resources/apis.dart';
 import 'package:twitter_flutter/screens/login2_screen.dart';
 import 'package:twitter_flutter/widgets/text_field_input.dart';
 import 'package:intl/intl.dart';
+import 'package:custom_searchable_dropdown/custom_searchable_dropdown.dart';
 
 import '../utils/colors.dart';
 
@@ -21,18 +25,87 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+
+  final TextEditingController _languageController = TextEditingController();
+
+
   int currentStep = 0;
   bool isPhone = false;
+  bool _passwordVisible = false;
+  var selected;
+  late List selectedList;
+  bool _isLoading = false;
+
+  List listToSearch = [
+    {
+      'name': 'English',
+    },
+    {
+      'name': 'Kiswahili',
+    },
+    {
+      'name': 'Spanish',
+    },
+    {
+      'name': 'Chineese',
+    },
+    {
+      'name': 'Sandeep',
+    },
+    {
+      'name': 'Tazeem',
+    },
+    {
+      'name': 'Najaf',
+    },
+    {
+      'name': 'Izhar',
+    },
+  ];
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _dobController.text = '';
+    _passwordVisible = false;
+  }
+
+  void registerUser(
+      String user_name,
+      String email,
+      String first_name,
+      String last_name,
+      String password,
+      String password2,
+      String language,
+      String date_of_birth) async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    var response = await Apis().registerUser(
+      user_name:_usernameController.text,
+      email:_emailController.text,
+      first_name:_firstNameController.text,
+      last_name:_lastNameController.text,
+      password:_passwordController.text, 
+      password2:_passwordController.text,
+      language:_languageController.text,
+      date_of_birth:_dobController.text,
+      phone_number:_phoneController.text,
+      );
+    print(response.user_name);
   }
 
   @override
   Widget build(BuildContext context) {
+    final InputBorder =
+        OutlineInputBorder(borderSide: Divider.createBorderSide(context));
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -65,34 +138,67 @@ class _SignUpPageState extends State<SignUpPage> {
         controlsBuilder: (context, _) {
           return Row(
             children: <Widget>[
-              TextButton(
-                onPressed: () {
-                  final isLastStep = currentStep == getSteps().length - 1;
+              Align(
+                alignment: Alignment.bottomLeft,
+                child: TextButton(
+                  onPressed: () {
+                    currentStep == 0
+                        ? null
+                        : setState(() => {currentStep -= 1});
+                  },
+                  style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                              side: const BorderSide(color: Colors.grey)))),
+                  child: const Text('Back'),
+                ),
+              ),
+              getSteps().length - 1 == currentStep
+                  ? Align(
+                      alignment: Alignment.bottomRight,
+                      child: TextButton(
+                        onPressed: () {
+                          // Function For Signing Up
+                          // registerUser
+                        },
+                        style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                    side:
+                                        const BorderSide(color: Colors.grey)))),
+                        child: const Text('Sign Up'),
+                      ),
+                    )
+                  : Align(
+                      alignment: Alignment.bottomRight,
+                      child: TextButton(
+                        onPressed: () {
+                          final isLastStep =
+                              currentStep == getSteps().length - 1;
 
-                  if (isLastStep) {
-                    print("Completed");
-                  } else {
-                    setState(() => {currentStep += 1});
-                  }
-                },
-                style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                              side: const BorderSide(color: Colors.grey)))),
-                child: const Text('NEXT'),
-              ),
-              TextButton(
-                onPressed: () {
-currentStep == 0 ? null : setState(() => {currentStep -= 1});
-                },
-                style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                              side: const BorderSide(color: Colors.grey)))),
-                child: const Text('EXIT'),
-              ),
+                          if (isLastStep) {
+                            print(_usernameController.text);
+                            print(_phoneController.text);
+                            print(_emailController.text);
+                            print(_passwordController.text);
+                            print(_dobController.text);
+                          } else {
+                            setState(() => {currentStep += 1});
+                          }
+                        },
+                        style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                    side:
+                                        const BorderSide(color: Colors.grey)))),
+                        child: const Text('Next'),
+                      ),
+                    ),
             ],
           );
         },
@@ -116,8 +222,7 @@ currentStep == 0 ? null : setState(() => {currentStep -= 1});
   List<Step> getSteps() => [
         Step(
             title: const Text("Step 1"),
-            content: Container(
-                child: Column(
+            content: Column(
               children: [
                 TextInputField(
                     textEditingController: _usernameController,
@@ -163,6 +268,16 @@ currentStep == 0 ? null : setState(() => {currentStep -= 1});
                           ),
                         ),
                       ),
+                const SizedBox(
+                  height: 27,
+                ),
+                Container(
+                  child: TextInputField(
+                      textEditingController: _passwordController,
+                      textInputType: TextInputType.visiblePassword,
+                      hintText: "Password",
+                      isPass: true),
+                ),
                 const SizedBox(
                   height: 27,
                 ),
@@ -228,16 +343,142 @@ currentStep == 0 ? null : setState(() => {currentStep -= 1});
                     )
                   ]),
                 ),
+                const SizedBox(
+                  height: 27,
+                ),
               ],
-            )),
+            ),
             isActive: currentStep >= 0),
         Step(
             title: const Text("Step 2"),
-            content: Container(),
+            content: Container(
+              child: Column(
+                children: [
+                  const Text(
+                    "Select your language(s)",
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: mobileBackgroundColor,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Roboto',
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Text(
+                    "Select language(s) you want to use to personalize your Twitter experience",
+                    style: TextStyle(
+                      fontSize: 15,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 27,
+                  ),
+                  CustomSearchableDropDown(
+                    initialValue: [],
+                    items: listToSearch,
+                    label: 'Search languages',
+                    multiSelectTag: 'Languages',
+                    multiSelectValuesAsWidget: true,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Color.fromARGB(255, 100, 100, 100),
+                      ),
+                      borderRadius: BorderRadius.circular(40),
+                    ),
+                    multiSelect: true,
+                    prefixIcon: const Padding(
+                      padding: EdgeInsets.all(0.0),
+                      child: Icon(Icons.search),
+                    ),
+                    dropDownMenuItems: listToSearch?.map((item) {
+                          return item['name'];
+                        })?.toList() ??
+                        [],
+                    onChanged: (value) {
+                      print(value.toString());
+                      if (value != null) {
+                        selectedList = jsonDecode(value);
+                      } else {
+                        selectedList.clear();
+                      }
+                    },
+                  ),
+                  const SizedBox(
+                    height: 27,
+                  ),
+                ],
+              ),
+            ),
             isActive: currentStep >= 1),
         Step(
             title: const Text("Step 3"),
-            content: Container(),
+            content: Container(
+              child: Column(children: [
+                TextInputField(
+                  hintText: "Username",
+                  isPass: false,
+                  textEditingController: _usernameController,
+                  textInputType: TextInputType.text,
+                ),
+                const SizedBox(
+                  height: 27,
+                ),
+                TextInputField(
+                  hintText: "Email",
+                  isPass: false,
+                  textEditingController: _emailController,
+                  textInputType: TextInputType.text,
+                ),
+                const SizedBox(
+                  height: 27,
+                ),
+                TextField(
+                  controller:
+                      TextEditingController(text: _passwordController.text),
+                  decoration: InputDecoration(
+                    // hintText: hintText,
+                    border: OutlineInputBorder(
+                        borderSide: Divider.createBorderSide(context)),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: Divider.createBorderSide(context)),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: Divider.createBorderSide(context)),
+                    filled: true,
+                    labelText: "Password",
+                    contentPadding: const EdgeInsets.all(8),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        // Based on passwordVisible state choose the icon
+                        _passwordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        color: Theme.of(context).primaryColorDark,
+                      ),
+                      onPressed: () {
+                        // Update the state i.e. toogle the state of passwordVisible variable
+                        setState(() {
+                          _passwordVisible = !_passwordVisible;
+                          print("visible");
+                        });
+                      },
+                    ),
+                  ),
+                  keyboardType: TextInputType.text,
+                  obscureText: _passwordVisible,
+                ),
+                const SizedBox(
+                  height: 27,
+                ),
+                TextInputField(
+                  hintText: "Date of Birth",
+                  isPass: false,
+                  textEditingController: _dobController,
+                  textInputType: TextInputType.text,
+                ),
+              ]),
+            ),
             isActive: currentStep >= 2),
       ];
 }

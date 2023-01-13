@@ -27,12 +27,11 @@ class _LoginPageState extends State<LoginPage> {
     _passwordController.dispose();
   }
 
-    void navigateToNextLoginPage() {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) =>  const LoginPage2(),settings: RouteSettings(
-              arguments: _usernameController.text )));
+  void navigateToNextLoginPage() {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => LoginPage2(username: _usernameController.text),
+        ));
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +39,6 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         leading: Row(
-  
           children: [
             IconButton(
               alignment: Alignment.center,
@@ -54,18 +52,17 @@ class _LoginPageState extends State<LoginPage> {
               'assets/ic_twitter.svg',
               // color: primaryColor,
               height: 40,
-            ),  const SizedBox(
-            height: 27,
-          ),
+            ),
+            const SizedBox(
+              height: 27,
+            ),
           ],
         ),
         elevation: 0,
-        
       ),
-      
       body: SafeArea(
           child: Container(
-         padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
         width: double.infinity,
         child: Column(children: [
           const SizedBox(
@@ -82,7 +79,8 @@ class _LoginPageState extends State<LoginPage> {
                 fontFamily: 'Roboto',
               ),
             ),
-          ),  const SizedBox(
+          ),
+          const SizedBox(
             height: 27,
           ),
           Container(
@@ -96,10 +94,8 @@ class _LoginPageState extends State<LoginPage> {
           const Spacer(),
           const Divider(),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 5),
-            margin:  const EdgeInsets.symmetric(horizontal: 5,vertical: 5),
-            
-            
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+            margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
             child: Row(
               // mainAxisAlignment: MainAxisAlignment.spaceAround,
               // crossAxisAlignment: CrossAxisAlignment.start,
