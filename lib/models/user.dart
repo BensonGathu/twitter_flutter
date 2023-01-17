@@ -7,7 +7,7 @@ class User {
   final String password2;
   final date_of_birth;
   final String language;
-  final int phone_number;
+  final String phone_number;
 
   const User({
     required this.user_name,

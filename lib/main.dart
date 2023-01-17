@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:twitter_flutter/responsive/mobile_screen_layout.dart';
 import 'package:twitter_flutter/screens/login_screen.dart';
 import 'package:twitter_flutter/screens/signUp_screen.dart';
 import 'package:twitter_flutter/utils/colors.dart';
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      home: SignUpPage(),
+      home: MobileScreenLayout(),
     );
   }
 }
