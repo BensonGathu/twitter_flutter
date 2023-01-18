@@ -102,24 +102,37 @@ class _SignUpPageState extends State<SignUpPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        leading: Row(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            IconButton(
-              alignment: Alignment.center,
-              icon: const Icon(
-                Icons.arrow_back,
-                color: mobileBackgroundColor,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0.0, 0.0, 8.0, 0.0),
+              child: IconButton(
+                  onPressed: () => {print("pressed")},
+                  icon: const Icon(
+                    Icons.close_rounded,
+                   
+                     color: mobileBackgroundColor,
+                    
+                  )),
+            ),
+            Spacer(),
+            Container(
+              child: SvgPicture.asset(
+                'assets/ic_twitter.svg',
+                // color: primaryColor,
+                height: 30,
               ),
-              onPressed: () {},
             ),
-            SvgPicture.asset(
-              'assets/ic_twitter.svg',
-              // color: primaryColor,
-              height: 40,
-            ),
-            const SizedBox(
-              height: 27,
-            ),
+            Spacer(),
+            Container(
+              child: IconButton(
+                onPressed: () {},
+                icon: Icon(Icons.stacked_bar_chart),
+                color: secondaryColor,
+              ),
+            )
           ],
         ),
         elevation: 0,

@@ -57,35 +57,33 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
       bottomNavigationBar: CupertinoTabBar(
         items: [
           BottomNavigationBarItem(
-              icon: Icon(
-                _page == 0 ? Icons.home_rounded : Icons.home_outlined,
-                color: bottomIconsColor,
+              icon: _page == 0 ?  const Icon(
+                Icons.home_rounded,color: bottomIconsColor,size: 37, ): const Icon( Icons.home_outlined,
+                color: bottomIconsColor,size: 31
+              ),
+              label: ''),
+         BottomNavigationBarItem(
+              icon: _page == 1 ?  const Icon(
+                Icons.search_sharp,color: bottomIconsColor,size: 37, ): const Icon(Icons.search_outlined,
+                color: bottomIconsColor,size: 32
               ),
               label: ''),
           BottomNavigationBarItem(
-              icon: Icon(
-                _page == 1 ? Icons.search_sharp : Icons.search_outlined,
-                color: bottomIconsColor,
+              icon: _page == 2 ?  const Icon(
+                Icons.podcasts,color: bottomIconsColor,size: 37, ): const Icon( Icons.podcasts,
+                color: bottomIconsColor,size: 27
               ),
               label: ''),
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.podcasts,
-                color: _page == 2 ? primaryColor : mobileBackgroundColor,
+           BottomNavigationBarItem(
+              icon: _page == 3 ?  const Icon(
+                Icons.notifications_rounded,color: bottomIconsColor,size: 37, ): const Icon( Icons.notifications_outlined,
+                color: bottomIconsColor,size: 27
               ),
               label: ''),
-          BottomNavigationBarItem(
-              icon: Icon(
-                _page == 3
-                    ? Icons.notifications_rounded
-                    : Icons.notifications_outlined,
-                color: bottomIconsColor,
-              ),
-              label: ''),
-          BottomNavigationBarItem(
-              icon: Icon(
-                _page == 4 ? Icons.email : Icons.email_outlined,
-                color: bottomIconsColor,
+           BottomNavigationBarItem(
+              icon: _page == 4 ?  const Icon(
+                Icons.email,color: bottomIconsColor,size: 37, ): const Icon( Icons.email_outlined,
+                color: bottomIconsColor,size: 25
               ),
               label: '')
         ],

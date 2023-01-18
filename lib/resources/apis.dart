@@ -5,10 +5,10 @@ import 'package:http/http.dart' as http;
 import 'package:twitter_flutter/models/user.dart';
 
 class Apis {
-  var baseURL = 'http://10.1.1.1:8000/';
+  var baseURL = 'http://10.0.1.1:8000/';
   var register = 'register/';
 
-  Future<User> registerUser ({
+  Future<User> registerUser({
     required String user_name,
     required String email,
     required String first_name,
@@ -36,17 +36,18 @@ class Apis {
         'phone_number': phone_number.toString(),
       }),
     );
-    if (response.statusCode == 201) {
-      // If the server did return a 201 CREATED response,
-      // then parse the JSON.
+    print(response.toString());
+    // if (response.statusCode == 201) {
+    //   // If the server did return a 201 CREATED response,
+    //   // then parse the JSON.
 
       return User.fromJson(jsonDecode(response.body));
-      // print('registerd successfully');
-    } else {
-      // If the server did not return a 201 CREATED response,
-      // then throw an exception.
-      throw Exception('User Couldnt be register');
-      // print("failed to register");
-    }
+    //   // print('registerd successfully');
+    // } else {
+    //   // If the server did not return a 201 CREATED response,
+    //   // then throw an exception.
+    //   throw Exception('User Couldnt be register');
+    //   // print("failed to register");
+    // }
   }
 }
