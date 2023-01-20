@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:twitter_flutter/utils/colors.dart';
+import 'package:twitter_flutter/widgets/menu_widget.dart';
 import 'package:twitter_flutter/widgets/tweet_card.dart';
 
 class TweetsScreen extends StatelessWidget {
@@ -11,9 +12,21 @@ class TweetsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: NavDrawer(),
+      // appBar: AppBar(
+      //     leading: Row(
+      //   children: [
+      //     Builder(
+      //         builder: (context) => // Ensure Scaffold is in context
+      //             IconButton(
+      //                 icon: Icon(Icons.person),
+      //                 onPressed: () => Scaffold.of(context).openDrawer())),
+      //   ],
+      // )),
       appBar: AppBar(
         backgroundColor: primaryColor,
-        title: Row(
+
+        title:  Builder(builder: (context) => Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -21,14 +34,14 @@ class TweetsScreen extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(0.0, 0.0, 8.0, 0.0),
 
               child: IconButton(
-                  onPressed: () => {print("pressed")},
+                  onPressed: () => Scaffold.of(context).openDrawer(),
                   icon: const Icon(
                     Icons.person,
                     size: 24.0,
                     color: secondaryColor,
                   )),
             ),
-            Spacer(),
+            const Spacer(),
             Container(child:  SvgPicture.asset(
               'assets/ic_twitter.svg',
               // color: primaryColor,
@@ -43,8 +56,8 @@ class TweetsScreen extends StatelessWidget {
               ),
             )
           ],
-        ),elevation: 0,
-      ),
+        ),
+      ),elevation: 0),
       body: TweetCard(),
     );
   }

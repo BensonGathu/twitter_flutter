@@ -51,3 +51,130 @@ class Apis {
     // }
   }
 }
+
+
+
+// Column(
+//             children: [
+//               Container(
+//                 child: Row(
+//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: [
+//                     Container(
+//                       padding: const EdgeInsets.only(top: 8),
+//                       child: const CircleAvatar(
+//                         radius: 23,
+//                         backgroundImage: NetworkImage(
+//                             'https://images.freeimages.com/clg/images/47/479715/bird-vector-10_f.jpg'),
+//                       ),
+//                     ),
+//                     // const Spacer(),
+//                     Container(
+//                       padding: const EdgeInsets.only(top: 8),
+//                       child: const CircleAvatar(
+//                         radius: 18,
+//                         backgroundImage: NetworkImage(
+//                             'https://images.freeimages.com/clg/images/47/479715/bird-vector-10_f.jpg'),
+//                       ),
+//                     )
+//                   ],
+//                 ),
+//               ),
+//               Container(
+//                 //padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+//                 child: Column(
+//                   mainAxisAlignment: MainAxisAlignment.spaceAround,
+//                   children: [
+//                     RichText(
+//                         text: const TextSpan(
+//                             style: TextStyle(
+//                               color: mobileBackgroundColor,
+//                             ),
+//                             children: [
+//                           TextSpan(
+//                               text: "fullnames",
+//                               style: TextStyle(
+//                                   fontWeight: FontWeight.bold, fontSize: 16)),
+//                         ]))
+//                   ],
+//                 ),
+//               ),
+//               RichText(
+//                   text: const TextSpan(
+//                       style: TextStyle(
+//                         color: mobileBackgroundColor,
+//                       ),
+//                       children: [
+//                     TextSpan(text: " @username", style: TextStyle()),
+//                   ])),
+//               Container(
+//                 child: Row(
+//                   mainAxisAlignment: MainAxisAlignment.start,
+//                   children: [Text("Following"), Text("Followers")],
+//                 ),
+//               )
+//             ],
+//           )
+
+
+
+
+
+
+//  Row(
+//             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+//             children: [
+//               Container(
+//                 child: Column(
+//                   children: [
+//                     const CircleAvatar(
+//                       radius: 23,
+//                       backgroundImage: NetworkImage(
+//                           'https://images.freeimages.com/clg/images/47/479715/bird-vector-10_f.jpg'),
+//                     ),
+//                     Column(
+//                       mainAxisAlignment: MainAxisAlignment.spaceAround,
+//                       children: [
+//                         RichText(
+//                             text: const TextSpan(
+//                                 style: TextStyle(
+//                                   color: mobileBackgroundColor,
+//                                 ),
+//                                 children: [
+//                               TextSpan(
+//                                   text: "fullnames",
+//                                   style: TextStyle(
+//                                       fontWeight: FontWeight.bold,
+//                                       fontSize: 16)),
+//                             ])),
+//                         Container()
+//                       ],
+//                     ),
+//                     RichText(
+//                         text: const TextSpan(
+//                             style: TextStyle(
+//                               color: mobileBackgroundColor,
+//                             ),
+//                             children: [
+//                           TextSpan(text: " @username", style: TextStyle()),
+//                         ])),
+//                     Row(
+//                       mainAxisAlignment: MainAxisAlignment.start,
+//                       children: const [Text("Following"), Text("Followers")],
+//                     )
+//                   ],
+//                 ),
+//               ),
+//               Container(
+//                 padding: const EdgeInsets.only(bottom: 80),
+//                 child: const CircleAvatar(
+//                   radius: 18,
+//                   backgroundImage: NetworkImage(
+//                       'https://images.freeimages.com/clg/images/47/479715/bird-vector-10_f.jpg'),
+//                 ),
+//               ),
+//             ],
+//           )
