@@ -13,16 +13,7 @@ class TweetsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: NavDrawer(),
-      // appBar: AppBar(
-      //     leading: Row(
-      //   children: [
-      //     Builder(
-      //         builder: (context) => // Ensure Scaffold is in context
-      //             IconButton(
-      //                 icon: Icon(Icons.person),
-      //                 onPressed: () => Scaffold.of(context).openDrawer())),
-      //   ],
-      // )),
+    
       appBar: AppBar(
         backgroundColor: primaryColor,
 

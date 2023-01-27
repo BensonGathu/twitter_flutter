@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -6,11 +7,16 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:twitter_flutter/resources/apis.dart';
 import 'package:twitter_flutter/screens/login2_screen.dart';
+import 'package:twitter_flutter/screens/login_screen.dart';
+import 'package:twitter_flutter/utils/utils.dart';
 import 'package:twitter_flutter/widgets/text_field_input.dart';
 import 'package:intl/intl.dart';
 import 'package:custom_searchable_dropdown/custom_searchable_dropdown.dart';
+import 'dart:typed_data';
+import 'package:http/http.dart' as http;
 
 import '../utils/colors.dart';
 import '../widgets/default_text_widget.dart';
@@ -40,6 +46,8 @@ class _SignUpPageState extends State<SignUpPage> {
   var selected;
   late List selectedList;
   bool _isLoading = false;
+  Uint8List? _image;
+  late File _image2;
 
   List listToSearch = [
     {
@@ -67,6 +75,35 @@ class _SignUpPageState extends State<SignUpPage> {
       'name': 'Izhar',
     },
   ];
+  Future pickProfileImage(ImageSource source) async {
+    final ImagePicker _imagePicker = ImagePicker();
+
+    var _file = await _imagePicker.pickImage(source: source);
+
+    if (_file != null) {
+      setState(() {
+        _image2 = File(_file.path);
+      });
+      print("file path");
+      print(File(_file.path));
+      return await _file.readAsBytes();
+    }
+    print("No image selected");
+  }
+
+  Future uploadProfileImage() async {
+    final uri = Uri();
+    var request = http.MultipartRequest('POST', uri);
+    var pic = await http.MultipartFile.fromPath("image", _image2.path);
+    request.files.add(pic);
+    var response = await request.send();
+
+    if (response.statusCode == 200) {
+      print("Image Uploaded");
+    } else {
+      print("Image Not uploaded");
+    }
+  }
 
   @override
   void initState() {
@@ -81,18 +118,82 @@ class _SignUpPageState extends State<SignUpPage> {
       _isLoading = true;
     });
 
-    var response =  Apis().registerUser(
-      user_name: _usernameController.text,
-      email: _emailController.text,
-      first_name: _firstNameController.text,
-      last_name: _lastNameController.text,
-      password: _passwordController.text,
-      password2: _passwordController.text,
-      language: _languageController.text,
-      date_of_birth: _dobController.text,
-      phone_number: _phoneController.text,
+    var body = {
+      "user_name": _usernameController.text,
+      "email": _emailController.text,
+      "first_name": _firstNameController.text,
+      "last_name": _lastNameController.text,
+      "password": _passwordController.text,
+      "password2": _passwordController.text,
+      "language": _languageController.text,
+      "date_of_birth": _dobController.text,
+      "phone_number": _phoneController.text,
+    };
+
+    await Apis().registerUser(body).then((value) async {
+      if (value.statusCode == 200) {
+        //  List filtered =
+        //             await Apis().filterUserByEmail(_emailController.text);
+        // Set localStorage
+        // await setLocalStorage(filtered);
+
+        Navigator.push(context,
+            MaterialPageRoute(builder: ((context) => const LoginPage())));
+      } else {
+        // Signout user
+        value.statusCode.toString();
+        throw 'An error occured';
+      }
+    });
+  }
+
+  void selectImage() async {
+    Uint8List image = await pickProfileImage(ImageSource.gallery);
+    setState(() {
+      _image = image;
+    });
+  }
+
+  _selectImage(BuildContext parentContext) async {
+    return showDialog(
+      context: parentContext,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: const Text('Profle pic'),
+          children: <Widget>[
+            SimpleDialogOption(
+                padding: const EdgeInsets.all(20),
+                child: const Text('Take a photo'),
+                onPressed: () async {
+                  Navigator.pop(context);
+                  Uint8List file = await pickProfileImage(ImageSource.camera);
+                  print("file bing uploaded");
+                  print(file);
+                  setState(() {
+                    _image = file;
+                  });
+                }),
+            SimpleDialogOption(
+                padding: const EdgeInsets.all(20),
+                child: const Text('Choose from Gallery'),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  Uint8List file = await pickProfileImage(ImageSource.gallery);
+                  setState(() {
+                    _image = file;
+                  });
+                }),
+            SimpleDialogOption(
+              padding: const EdgeInsets.all(20),
+              child: const Text("Cancel"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )
+          ],
+        );
+      },
     );
-    print(response);
   }
 
   @override
@@ -112,9 +213,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   onPressed: () => {print("pressed")},
                   icon: const Icon(
                     Icons.close_rounded,
-                   
-                     color: mobileBackgroundColor,
-                    
+                    color: mobileBackgroundColor,
                   )),
             ),
             Spacer(),
@@ -164,7 +263,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ? Align(
                       alignment: Alignment.bottomRight,
                       child: TextButton(
-                        onPressed: () {
+                        onPressed: () async {
                           // Function For Signing Up
                           registerUser();
                         },
@@ -312,6 +411,33 @@ class _SignUpPageState extends State<SignUpPage> {
                 children: [
                   Container(
                     child: Column(children: [
+                      //circular widget to acccept and show our selected file
+                      Stack(
+                        children: [
+                          _image != null
+                              ? CircleAvatar(
+                                  radius: 64,
+                                  backgroundImage: MemoryImage(_image!),
+                                )
+                              : const CircleAvatar(
+                                  radius: 58,
+                                  backgroundImage: NetworkImage(
+                                      'https://img.freepik.com/free-icon/user_318-875902.jpg?w=2000'),
+                                ),
+                          Positioned(
+                            bottom: -12,
+                            left: 75,
+                            child: IconButton(
+                              // onPressed:selectImage,
+                              onPressed: () => _selectImage(context),
+                              icon: const Icon(Icons.add_a_photo),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 24,
+                      ),
                       const Align(
                         alignment: Alignment.topLeft,
                         child: Text(

@@ -1,9 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:twitter_flutter/models/user.dart';
+import 'package:twitter_flutter/resources/apis.dart';
 import 'package:twitter_flutter/utils/colors.dart';
+import 'package:twitter_flutter/providers/user_provider.dart';
+import 'package:provider/provider.dart';
+
+User? user;
+
+void getuserDetails() async {
+  User users = await Apis().getUserSession();
+  user = users; 
+  
+}
+
 
 class NavDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final user2 = Provider.of<UserProvider>(context).getUser;
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -45,23 +60,23 @@ class NavDrawer extends StatelessWidget {
                   // mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     RichText(
-                        text: const TextSpan(
+                        text:  TextSpan(
                             style: TextStyle(
                               color: mobileBackgroundColor,
                             ),
                             children: [
                           TextSpan(
-                              text: "fullnames",
+                              text: user?.email,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 16)),
                         ])),
                     RichText(
-                        text: const TextSpan(
+                        text:  TextSpan(
                             style: TextStyle(
                               color: mobileBackgroundColor,
                             ),
                             children: [
-                          TextSpan(text: " @username", style: TextStyle()),
+                          TextSpan(text: user2, style: TextStyle()),
                         ])),
                   ],
                 ),
@@ -88,7 +103,7 @@ class NavDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.person),
             title: const Text('Profle'),
-            onTap: () => {},
+            onTap: () => {print(user?.email)},
           ),
           ListTile(
             leading: const Icon(Icons.verified_user),
@@ -114,34 +129,30 @@ class NavDrawer extends StatelessWidget {
             height: 40,
           ),
           Divider(),
-          ExpansionTile(
-              title: Text("Professional Tools"),
-              children: [
-                ListTile(
-                  leading: const Icon(Icons.rocket_launch_outlined),
-                  title: const Text('Twitter for Professionals'),
-                  onTap: () => {Navigator.of(context).pop()},
-                ),
-                ListTile(
-                  leading: const Icon(Icons.monetization_on),
-                  title: const Text('Monetisation'),
-                  onTap: () => {Navigator.of(context).pop()},
-                ),
-              ]),
-                  ExpansionTile(
-              title: const Text("Settings & Support"),
-              children: [
-                ListTile(
-                  leading: const Icon(Icons.settings),
-                  title: const Text('Settings and privacy'),
-                  onTap: () => {Navigator.of(context).pop()},
-                ),
-                ListTile(
-                  leading: const Icon(Icons.help_center),
-                  title: const Text('Help Centre'),
-                  onTap: () => {Navigator.of(context).pop()},
-                ),
-              ]),
+          ExpansionTile(title: Text("Professional Tools"), children: [
+            ListTile(
+              leading: const Icon(Icons.rocket_launch_outlined),
+              title: const Text('Twitter for Professionals'),
+              onTap: () => {Navigator.of(context).pop()},
+            ),
+            ListTile(
+              leading: const Icon(Icons.monetization_on),
+              title: const Text('Monetisation'),
+              onTap: () => {Navigator.of(context).pop()},
+            ),
+          ]),
+          ExpansionTile(title: const Text("Settings & Support"), children: [
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text('Settings and privacy'),
+              onTap: () => {Navigator.of(context).pop()},
+            ),
+            ListTile(
+              leading: const Icon(Icons.help_center),
+              title: const Text('Help Centre'),
+              onTap: () => {Navigator.of(context).pop()},
+            ),
+          ]),
         ],
       ),
     );

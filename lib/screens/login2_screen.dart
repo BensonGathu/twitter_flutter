@@ -3,8 +3,13 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:twitter_flutter/models/user.dart';
+import 'package:twitter_flutter/resources/apis.dart';
+import 'package:twitter_flutter/responsive/mobile_screen_layout.dart';
+import 'package:twitter_flutter/utils/utils.dart';
 import 'package:twitter_flutter/widgets/text_field_input.dart';
 import '../utils/colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage2 extends StatefulWidget {
   String username;
@@ -17,11 +22,34 @@ class LoginPage2 extends StatefulWidget {
 class _LoginPage2State extends State<LoginPage2> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = true;
   // late String username = "";
 
-  void Login() {
-    print(_passwordController.text);
-    print(_usernameController.text);
+  void loginUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isLoading = true;
+    });
+    var body = {
+      "username": _usernameController.text,
+      "password": _passwordController.text,
+    };
+
+    var userInfo = await Apis().loginUser(body).then((value) async {
+      if (value.statusCode == 200) {
+        List filtered =
+            await Apis().filterUserByEmail(_usernameController.text);
+        setLocalStorage(filtered);
+        Navigator.push(context,
+            MaterialPageRoute(builder: ((context) => MobileScreenLayout())));
+      } else {
+        // Signout user
+        value.statusCode.toString();
+        throw 'An error occured';
+      }
+    });
+    print("user infor");
+    print(userInfo);
   }
 
   @override
@@ -40,7 +68,7 @@ class _LoginPage2State extends State<LoginPage2> {
     var username = ModalRoute.of(context)!.settings.arguments;
     setState(() => {username = username});
     return Scaffold(
-       appBar: AppBar(
+      appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -52,9 +80,7 @@ class _LoginPage2State extends State<LoginPage2> {
                   onPressed: () => {print("pressed")},
                   icon: const Icon(
                     Icons.close_rounded,
-                   
-                     color: mobileBackgroundColor,
-                    
+                    color: mobileBackgroundColor,
                   )),
             ),
             Spacer(),
@@ -138,7 +164,7 @@ class _LoginPage2State extends State<LoginPage2> {
                 ),
                 const Spacer(),
                 TextButton(
-                    onPressed: Login,
+                    onPressed: loginUser,
                     style: ButtonStyle(
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(

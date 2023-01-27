@@ -18,7 +18,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
+  bool _isLoading = false;
   @override
   void dispose() {
     // TODO: implement dispose
@@ -32,6 +32,8 @@ class _LoginPageState extends State<LoginPage> {
       builder: (context) => LoginPage2(username: _usernameController.text),
     ));
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -48,9 +50,7 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () => {print("pressed")},
                   icon: const Icon(
                     Icons.close_rounded,
-                   
-                     color: mobileBackgroundColor,
-                    
+                    color: mobileBackgroundColor,
                   )),
             ),
             Spacer(),

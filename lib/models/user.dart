@@ -23,27 +23,31 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      user_name: json['user_name'],
-      email: json['email'],
-      first_name: json['first_name'],
-      last_name: json['last_name'],
-      password: json['password'],
-      password2: json['password2'],
-      date_of_birth: json['date_of_birth'],
-      language: json['language'],
-      phone_number: json['phone_number']
-    );
+        user_name: json['user_name'],
+        email: json['email'],
+        first_name: json['first_name'],
+        last_name: json['last_name'],
+        password: json['password'],
+        password2: json['password2'],
+        date_of_birth: json['date_of_birth'],
+        language: json['language'],
+        phone_number: json['phone_number']);
   }
 
-  // Map<String, dynamic> toJson() => {
-  //       "user_name": user_name,
-  //       "email": email,
-  //       "first_name": first_name,
-  //       "last_name": last_name,
-  //       "password": password,
-  //       "password2": password2,
-  //       "date_of_birth": date_of_birth,
-  //       "language": language,
-  //     };
+  static User fromSnap(snap) {
+    var snapshot = snap.data() as Map<String, dynamic>;
+
+    return User(
+        user_name: snapshot['user_name'],
+        email: snapshot['email'],
+        first_name: snapshot['first_name'],
+        last_name: snapshot['last_name'],
+        password: snapshot['password'],
+        password2: snapshot['password2'],
+        date_of_birth: snapshot['date_of_birth'],
+        language: snapshot['language'],
+        phone_number: snapshot['phone_number']);
+  }
+
 
 }
